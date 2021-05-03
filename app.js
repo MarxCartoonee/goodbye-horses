@@ -7,6 +7,10 @@ class App {
     hlhm: '🐴👨🕑',
     glhf: 'glhf',
   };
+  static minLengths = {
+    hlhm: 2,
+    glhf: 4,
+  };
   static clocks = {
     '01:00': '🕐',
     '02:00': '🕑',
@@ -54,10 +58,6 @@ class App {
     localStorage.setItem('accurateClock', !!accurateClock);
   }
 
-  static toggleAccurateClock = () => {
-    App.accurateClock = !App.accurateClock;
-  };
-
   static get totalInsanity() {
     const totalInsanity = localStorage.getItem('totalInsanity');
     return totalInsanity === 'true' ? true : false;
@@ -66,9 +66,29 @@ class App {
     localStorage.setItem('totalInsanity', !!totalInsanity);
   }
 
-  static toggleTotalInsanity = () => {
-    App.totalInsanity = !App.totalInsanity;
-  };
+  static get minLength() {
+    return App.minLengths[App.mode];
+  }
+
+  static get insanityLength() {
+    switch (App.mode) {
+      case 'hlhm':
+        return App.compoundCount * 2;
+      case 'glhf':
+        return App.compoundCount;
+    }
+  }
+
+  static get compoundCount() {
+    const compoundCount = localStorage.getItem('compoundCount');
+    return Math.max(Number(compoundCount), App.minLength);
+  }
+  static set compoundCount(compoundCount) {
+    localStorage.setItem(
+      'compoundCount',
+      Math.max(Number(compoundCount), App.minLength)
+    );
+  }
 
   static getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -94,12 +114,26 @@ class App {
     return clock;
   };
 
+  static chunkArray(array, chunkSize) {
+    const R = [];
+    for (let i = 0; i < array.length; i += chunkSize) {
+      R.push(array.slice(i, i + chunkSize));
+    }
+    return R;
+  }
+
   static concatName(nameArr, clock) {
     switch (App.mode) {
       case 'hlhm':
-        return `${App.capitalizeStr(nameArr[0])}${
-          nameArr[1]
-        } ${App.capitalizeStr(nameArr[2])}${nameArr[3]} ${clock}`;
+        const arr = App.chunkArray(nameArr, 2);
+        return `${arr
+          .map((compound) =>
+            compound
+              .map((v, i) => (i % 2 === 0 ? App.capitalizeStr(v) : v))
+              .join('')
+          )
+          .join(' ')} ${clock}`;
+
       case 'glhf':
         return `${nameArr.map(App.capitalizeStr).join(' ')} ${clock}`;
     }
@@ -107,7 +141,7 @@ class App {
 
   static generateName = () => {
     const segs = Array.from(App.segments[App.mode]);
-    const length = segs.length;
+    const length = App.totalInsanity ? App.insanityLength : segs.length;
     let nameArr = [];
     let name = '';
     let k = 0;
@@ -137,7 +171,24 @@ document.addEventListener('DOMContentLoaded', () => {
   const modeSelect = document.getElementById('mode-select');
   const accurateClock = document.getElementById('accurate-clock');
   const totalInsanity = document.getElementById('total-insanity');
+  const countColumn = document.getElementById('count-column');
+  const compoundCount = document.getElementById('compound-count');
   const actuator = document.getElementById('actuator');
+
+  const setMinLength = () => {
+    compoundCount.min = App.minLength;
+  };
+  const setCompoundCount = () => {
+    compoundCount.value = App.totalInsanity
+      ? Math.max(App.compoundCount, compoundCount.value)
+      : App.minLength;
+  };
+  const generateOutput = () => {
+    output.value = App.generateName();
+  };
+  const toggleClass = () => {
+    countColumn.classList.toggle('hidden', !App.totalInsanity);
+  };
 
   title.innerText = App.title;
 
@@ -145,6 +196,8 @@ document.addEventListener('DOMContentLoaded', () => {
   modeSelect.addEventListener('input', ($e) => {
     App.mode = $e.target.value;
     title.innerText = App.title;
+    setMinLength();
+    generateOutput();
   });
 
   accurateClock.checked = App.accurateClock;
@@ -155,9 +208,21 @@ document.addEventListener('DOMContentLoaded', () => {
   totalInsanity.checked = App.totalInsanity;
   totalInsanity.addEventListener('input', ($e) => {
     App.totalInsanity = $e.target.checked;
+    countColumn.classList.toggle('hidden', App.totalInsanity);
+    setCompoundCount();
+    generateOutput();
+    toggleClass();
+  });
+
+  toggleClass();
+  setCompoundCount();
+  setMinLength();
+  compoundCount.addEventListener('input', ($e) => {
+    App.compoundCount = $e.target.value;
+    generateOutput();
   });
 
   actuator.addEventListener('click', () => {
-    output.value = App.generateName();
+    generateOutput();
   });
 });

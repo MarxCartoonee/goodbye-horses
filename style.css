@@ -7,6 +7,22 @@ h1 {
   margin-bottom: 64px;
 }
 
-.button-row {
-  justify-content: flex-end;
+.column > label {
+  align-self: flex-start;
+}
+
+.column > input[type='checkbox'] {
+  margin-top: 1.25rem;
+}
+
+.button-row > .column {
+  text-align: right;
+}
+
+#output {
+  resize: vertical;
+}
+
+#count-column.hidden {
+  visibility: hidden;
 }
