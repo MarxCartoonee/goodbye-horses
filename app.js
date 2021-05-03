@@ -1,5 +1,12 @@
 class App {
-  static nameSegments = ['head', 'less', 'horse', 'man'];
+  static segments = {
+    hlhm: ['head', 'less', 'horse', 'man'],
+    glhf: ['good', 'luck', 'have', 'fun'],
+  };
+  static titles = {
+    hlhm: '🐴👨🕑',
+    glhf: 'glhf',
+  };
   static clocks = {
     '01:00': '🕐',
     '02:00': '🕑',
@@ -27,9 +34,20 @@ class App {
     '12:30': '🕧',
   };
 
+  static get mode() {
+    const mode = localStorage.getItem('mode');
+    return mode || 'hlhm';
+  }
+  static set mode(mode) {
+    localStorage.setItem('mode', mode);
+  }
+
+  static get title() {
+    return App.titles[App.mode].toLocaleUpperCase();
+  }
+
   static get accurateClock() {
     const accurateClock = localStorage.getItem('accurateClock');
-    console.log({ accurateClock });
     return accurateClock === 'true' ? true : false;
   }
   static set accurateClock(accurateClock) {
@@ -42,7 +60,6 @@ class App {
 
   static get totalInsanity() {
     const totalInsanity = localStorage.getItem('totalInsanity');
-    console.log({ totalInsanity });
     return totalInsanity === 'true' ? true : false;
   }
   static set totalInsanity(totalInsanity) {
@@ -77,8 +94,20 @@ class App {
     return clock;
   };
 
+  static concatName(nameArr, clock) {
+    switch (App.mode) {
+      case 'hlhm':
+        return `${App.capitalizeStr(nameArr[0])}${
+          nameArr[1]
+        } ${App.capitalizeStr(nameArr[2])}${nameArr[3]} ${clock}`;
+      case 'glhf':
+        return `${nameArr.map(App.capitalizeStr).join(' ')} ${clock}`;
+    }
+  }
+
   static generateName = () => {
-    const segs = Array.from(App.nameSegments);
+    const segs = Array.from(App.segments[App.mode]);
+    const length = segs.length;
     let nameArr = [];
     let name = '';
     let k = 0;
@@ -87,7 +116,7 @@ class App {
       ? App.getClock()
       : clocks[App.getRandomNumber(0, clocks.length - 1)];
 
-    for (let i = 0; i < App.nameSegments.length; i++) {
+    for (let i = 0; i < length; i++) {
       k = App.getRandomNumber(0, segs.length - 1);
       nameArr.push(segs[k]);
       if (!App.totalInsanity) {
@@ -95,9 +124,7 @@ class App {
       }
     }
 
-    name = `${App.capitalizeStr(nameArr[0])}${nameArr[1]} ${App.capitalizeStr(
-      nameArr[2]
-    )}${nameArr[3]} ${clock}`;
+    name = App.concatName(nameArr, clock);
 
     return name;
   };
@@ -105,10 +132,20 @@ class App {
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('Loading done');
+  const title = document.getElementById('title');
   const output = document.getElementById('output');
+  const modeSelect = document.getElementById('mode-select');
   const accurateClock = document.getElementById('accurate-clock');
   const totalInsanity = document.getElementById('total-insanity');
   const actuator = document.getElementById('actuator');
+
+  title.innerText = App.title;
+
+  modeSelect.value = App.mode;
+  modeSelect.addEventListener('input', ($e) => {
+    App.mode = $e.target.value;
+    title.innerText = App.title;
+  });
 
   accurateClock.checked = App.accurateClock;
   accurateClock.addEventListener('input', ($e) => {
