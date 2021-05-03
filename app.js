@@ -29,19 +29,29 @@ class App {
 
   static get accurateClock() {
     const accurateClock = localStorage.getItem('accurateClock');
-    return accurateClock === 'true' ? true : false;
+    console.log({ accurateClock });
+    return accurateClock === 'true' ? 'true' : 'false';
   }
   static set accurateClock(accurateClock) {
     localStorage.setItem('accurateClock', !!accurateClock);
   }
 
+  static toggleAccurateClock = () => {
+    App.accurateClock = !App.accurateClock;
+  };
+
   static get totalInsanity() {
     const totalInsanity = localStorage.getItem('totalInsanity');
-    return totalInsanity === 'true' ? true : false;
+    console.log({ totalInsanity });
+    return totalInsanity === 'true' ? 'true' : 'false';
   }
   static set totalInsanity(totalInsanity) {
     localStorage.setItem('totalInsanity', !!totalInsanity);
   }
+
+  static toggleTotalInsanity = () => {
+    App.totalInsanity = !App.totalInsanity;
+  };
 
   static getRandomNumber = (min, max) => {
     return Math.floor(Math.random() * (max - min + 1) + min);
@@ -100,14 +110,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const totalInsanity = document.getElementById('total-insanity');
   const actuator = document.getElementById('actuator');
 
-  accurateClock.value = App.accurateClock;
+  accurateClock.checked = App.accurateClock;
   accurateClock.addEventListener('input', ($e) => {
-    App.accurateClock = $e.target.value;
+    App.accurateClock = $e.target.checked;
   });
 
-  totalInsanity.value = App.totalInsanity;
+  totalInsanity.checked = App.totalInsanity;
   totalInsanity.addEventListener('input', ($e) => {
-    App.totalInsanity = $e.target.value;
+    App.totalInsanity = $e.target.checked;
   });
 
   actuator.addEventListener('click', () => {
