@@ -30,7 +30,7 @@ class App {
   static get accurateClock() {
     const accurateClock = localStorage.getItem('accurateClock');
     console.log({ accurateClock });
-    return accurateClock === 'true' ? 'true' : 'false';
+    return accurateClock === 'true' ? true : false;
   }
   static set accurateClock(accurateClock) {
     localStorage.setItem('accurateClock', !!accurateClock);
@@ -43,7 +43,7 @@ class App {
   static get totalInsanity() {
     const totalInsanity = localStorage.getItem('totalInsanity');
     console.log({ totalInsanity });
-    return totalInsanity === 'true' ? 'true' : 'false';
+    return totalInsanity === 'true' ? true : false;
   }
   static set totalInsanity(totalInsanity) {
     localStorage.setItem('totalInsanity', !!totalInsanity);
