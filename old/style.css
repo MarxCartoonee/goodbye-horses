@@ -1,0 +1,28 @@
+.container {
+  padding-top: 64px;
+  padding-bottom: 32px;
+}
+
+h1 {
+  margin-bottom: 64px;
+}
+
+.column > label {
+  align-self: flex-start;
+}
+
+.column > input[type='checkbox'] {
+  margin-top: 1.25rem;
+}
+
+.button-row > .column {
+  text-align: right;
+}
+
+#output {
+  resize: vertical;
+}
+
+#count-column.hidden {
+  visibility: hidden;
+}

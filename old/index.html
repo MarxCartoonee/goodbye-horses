@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css?family=Roboto:300,300italic,700,700italic"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <script src="app.js"></script>
+    <title>Goodbye Horses</title>
+  </head>
+  <body>
+    <div class="container">
+      <h1 id="title">🐴👨🕑</h1>
+      <div class="row">
+        <div class="column">
+          <textarea id="output" rows="1" readonly></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div class="column">
+          <label for="mode-select">Mode</label>
+          <select id="mode-select">
+            <option value="hlhm">🐴👨🕑</option>
+            <option value="glhf">glhf</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="column">
+          <label for="accurate-clock">Accurate clock?</label>
+          <input type="checkbox" id="accurate-clock" />
+        </div>
+        <div class="column">
+          <label for="accurate-clock">Absolute insanity?</label>
+          <input type="checkbox" id="total-insanity" />
+        </div>
+        <div class="column" id="count-column">
+          <label for="compound-count">No. of compounds</label>
+          <input type="number" id="compound-count" />
+        </div>
+      </div>
+      <div class="row button-row">
+        <div class="column">
+          <button class="button" id="actuator">Generate</button>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
