@@ -1,0 +1,11 @@
+.column > label {
+  align-self: flex-start;
+}
+
+.column > input[type='checkbox'] {
+  margin-top: 1.25rem;
+}
+
+.button-row > .column {
+  text-align: right;
+}
