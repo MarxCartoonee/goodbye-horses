@@ -39,11 +39,11 @@ class App {
   };
 
   static get mode() {
-    const mode = localStorage.getItem('mode');
+    const mode = JSON.parse(localStorage.getItem('mode'));
     return mode || 'hlhm';
   }
   static set mode(mode) {
-    localStorage.setItem('mode', mode);
+    localStorage.setItem('mode', JSON.stringify(mode));
   }
 
   static get title() {
@@ -51,19 +51,19 @@ class App {
   }
 
   static get accurateClock() {
-    const accurateClock = localStorage.getItem('accurateClock');
+    const accurateClock = JSON.parse(localStorage.getItem('accurateClock'));
     return accurateClock === 'true' ? true : false;
   }
   static set accurateClock(accurateClock) {
-    localStorage.setItem('accurateClock', !!accurateClock);
+    localStorage.setItem('accurateClock', JSON.stringify(accurateClock));
   }
 
   static get totalInsanity() {
-    const totalInsanity = localStorage.getItem('totalInsanity');
+    const totalInsanity = JSON.parse(localStorage.getItem('totalInsanity'));
     return totalInsanity === 'true' ? true : false;
   }
   static set totalInsanity(totalInsanity) {
-    localStorage.setItem('totalInsanity', !!totalInsanity);
+    localStorage.setItem('totalInsanity', JSON.stringify(totalInsanity));
   }
 
   static get minLength() {
@@ -80,13 +80,13 @@ class App {
   }
 
   static get compoundCount() {
-    const compoundCount = localStorage.getItem('compoundCount');
+    const compoundCount = JSON.parse(localStorage.getItem('compoundCount'));
     return Math.max(Number(compoundCount), App.minLength);
   }
   static set compoundCount(compoundCount) {
     localStorage.setItem(
       'compoundCount',
-      Math.max(Number(compoundCount), App.minLength)
+      JSON.stringify(Math.max(Number(compoundCount), App.minLength))
     );
   }
 
